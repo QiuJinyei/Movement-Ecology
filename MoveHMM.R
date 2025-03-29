@@ -1,11 +1,10 @@
 library(moveHMM)
 library(bayesmove)
 library(readxl)
-x <-read_xls("C:/Users/Administrator/Desktop/wash/23w/23w_f.xls")
 
+x <-read_xls("C:/Users/Administrator/Desktop/wash/23w/23w_f.xls")
 prep_data <- prepData(x,type="LL",coordNames=c("location_long","location_lat"))
 write.csv(prep_data,"C:/Users/Administrator/Desktop/wash/23w/23w_m.csv")
-
 head(prep_data)
 # 绘制步长的直方图
 breaks <- c(0, 0.1, 0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1, 2,3)
@@ -28,14 +27,11 @@ angleCon0 <- c(0.435,0.191) # initial concentrations (one for each state)
 anglePar0 <- c(angleMean0, angleCon0)
 #检查哪些行包含 NA 值
 rows_with_na <- which(rowSums(is.na(prep_data)) > 0)
-
 # 删除含有 NA 的行
 prep_data_clean <- prep_data[-rows_with_na, ]
-
 # 现在使用 prep_data_complete 来进行模型拟合
 m <- fitHMM(data = prep_data, nbStates = 2, stepPar0 = stepPar0, anglePar0 = anglePar0,stepDist="gamma",angleDist="vm"
             ,formula = ~1)
-
 m
 AIC(m)
 # For reproducibility
